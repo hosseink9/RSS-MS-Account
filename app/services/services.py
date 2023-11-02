@@ -16,3 +16,9 @@ def get_user_service(collection=Depends(sess_collection)):
     return UserService(collection)
 
 
+class UserService:
+    password_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
+
+    def __init__(self, collection):
+        self.collection = collection
+
