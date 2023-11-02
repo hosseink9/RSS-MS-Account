@@ -22,3 +22,6 @@ class UserService:
     def __init__(self, collection):
         self.collection = collection
 
+    def get_hashed_password(self, password: str) -> str:
+        return self.password_context.hash(password)
+
