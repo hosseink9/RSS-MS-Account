@@ -28,3 +28,13 @@ class UserService:
     def verify_password(self, password: str, hashed_pass: str) -> bool:
         return self.password_context.verify(password, hashed_pass)
 
+    async def get_user(self, username: str, password: str):
+        user_dict = await self.collection.find_one({'username': username})
+        result = self.verify_password(password, user_dict["password"])
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Password")
+
+        # return UserRequest(**user_dict)
+        return user_dict
+
