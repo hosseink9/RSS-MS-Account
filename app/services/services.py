@@ -42,3 +42,16 @@ class UserService:
         user = await self.get_user(username, password)
         return user
 
+    async def create_user(self, user):
+        check_user = await self.collection.find_one({"username": user.username})
+        if check_user is not None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with this username already exist"
+            )
+        hashed_password = self.get_hashed_password(user.password)
+        data = {"username": user.username, "password": hashed_password,
+                "firstname": user.firstname, "lastname": user.lastname}
+        await self.collection.insert_one(data)
+        # return UserResponse(**data)
+        return data
