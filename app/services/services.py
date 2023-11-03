@@ -30,6 +30,10 @@ class UserService:
 
     async def get_user(self, username: str, password: str):
         user_dict = await self.collection.find_one({'username': username})
+        if user_dict is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User was not found")
+
         result = self.verify_password(password, user_dict["password"])
         if not result:
             raise HTTPException(
