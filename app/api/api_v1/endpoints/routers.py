@@ -13,3 +13,10 @@ async def create_user(data: UserRequest, user_service: UserService = Depends(get
     user = await user_service.create_user(data)
     return user
 
+
+@router.post("/login", summary="Login user", status_code=status.HTTP_202_ACCEPTED, response_model=UserResponse)
+async def login(data: UserRequest, user_service: UserService = Depends(get_user_service)):
+    user = await user_service.get_user(data.username, data.password)
+    user["id"] = str(user["_id"])
+    print(user)
+    return user
