@@ -18,5 +18,4 @@ async def create_user(data: UserRequest, user_service: UserService = Depends(get
 async def login(data: UserRequest, user_service: UserService = Depends(get_user_service)):
     user = await user_service.get_user(data.username, data.password)
     user["id"] = str(user["_id"])
-    print(user)
     return user
